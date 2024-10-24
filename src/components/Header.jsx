@@ -42,7 +42,7 @@ function Header({type}) {
 
   return (
     <div className='header bg-[#003b95] text-white flex justify-center relative'>
-        <div className={`headerContainer ${type == "list" ?  'w-full flex flex-col items-center mt-5 mx-0 mb-0 px-3 ' : 'w-full flex flex-col items-center mt-5 mx-0 mb-24 px-3'}`}>
+        <div className={`headerContainer ${type == "list" ?  'w-full flex flex-col items-center mt-5 mx-0 mb-0 ps-20 pe-32' : 'w-full flex flex-col max-w-[1024px] mt-5 mx-0 mb-16 '}`}>
             <div className='headerList flex flex-wrap gap-x-8 gap-y-2 mb-10'>
                 <div className='headerListItem flex items-center gap-2  active  bg-[rgba(223,227,232,28%)] border py-[7px] px-4 rounded-full'>
                     <FaBed />
@@ -67,10 +67,10 @@ function Header({type}) {
             </div>
             { type != 'list' &&
             <>
-            <h1 className='headerTitle font-bold text-xl md:text-2xl lg:text-3xl text-center'>A lifetime of discounts? It's Genius.</h1>
+            <h1 className='headerTitle font-bold text-xl md:text-2xl lg:text-3xl'>A lifetime of discounts? It's Genius.</h1>
             <p className='headerDescription my-5 mx-0'>Get reward for your travels - unlock instant savings of 10% or more with a free Lanmbooking account</p>
-            <button className='headerBtn bg-[#0071c2] font-semibold border-none rounded cursor-pointer p-2'>Sign in /  Register</button>
-            <div className='headerSearch h-[40px] bg-white text-gray-400 border-[3px] border-[#febb02] flex items-center justify-around py-6 px-0 rounded absolute -bottom-6 w-[72%]'>
+            {/* <button className='headerBtn bg-[#0071c2] font-semibold border-none w-fit rounded cursor-pointer p-2'>Sign in /  Register</button> */}
+            <div className='headerSearch h-[60px] bg-white text-gray-400 border-[5px] border-[#febb02] flex items-center justify-between py-8 px-3 rounded absolute -bottom-6 w-[67.5%]'>
                 <div className='headerSearchItem flex items-center gap-2'>
                     <FaBed />
                     <input onChange={e => setDestination(e.target.value)} type="text" placeholder='Where are you going?' className='headerSearchInput border-none outline-none'/>
@@ -124,7 +124,7 @@ function Header({type}) {
                     }
                 </div>
                 <div className='headerSearchItem flex items-center gap-2'>
-                   <button className='headerBtn bg-[#0071c2] text-white border-none rounded cursor-pointer px-4 py-[6px]' onClick={handleSearch}>Search</button>
+                   <button className='headerBtn bg-[#0071c2] text-white border-none font-semibold text-[18px] rounded cursor-pointer px-8 py-2' onClick={handleSearch}>Search</button>
                 </div>
             </div>
             </>
