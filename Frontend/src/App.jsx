@@ -5,7 +5,7 @@ import {
   Routes,
   Route,
 } from 'react-router-dom'
-import Home from './pages/home'
+import Home from './pages/Home'
 import List from './pages/List'
 import Hotel from './pages/Hotel'
 

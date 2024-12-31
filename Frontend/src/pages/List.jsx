@@ -5,14 +5,24 @@ import { useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { DateRange } from 'react-date-range';
 import SearchItem from '../components/SearchItem';
+import useFetch from '../hooks/useFetch.js';
 
 function List() {
   const location = useLocation();
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.options);
+  const[min, setMin] = useState(undefined);
+  const[max, setMax] = useState(undefined);
+  
+  const { data, loading, error, reFetch} = useFetch(`/api/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`)
+  // console.log(data);
 
+  const handleClick = () => {
+    reFetch()
+  }
+  
   return (
     <>
       <Navbar />
@@ -41,16 +51,16 @@ function List() {
               onClick={() => setOpenDate(!openDate)}
               className="bg-white p-2 h-9 rounded font-semibold cursor-pointer"
             >
-              {`${format(date[0].startDate, 'MM/dd/yyyy')} to ${format(
-                date[0].endDate,
+              {`${format(dates[0].startDate, 'MM/dd/yyyy')} to ${format(
+                dates[0].endDate,
                 'MM/dd/yyyy'
               )}`}
             </span>
             {openDate && (
               <DateRange
-                onChange={(item) => setDate([item.selection])}
+                onChange={(item) => setDates([item.selection])}
                 minDate={new Date()}
-                ranges={date}
+                ranges={dates}
               />
             )}
           </div>
@@ -61,7 +71,13 @@ function List() {
                 <span className="lsOptionText">
                   Min price <small>per night</small>{' '}
                 </span>
-                <input type="number" className="lsOptionInput rounded w-12 p" />
+                <input type="number" onChange={(e) => setMin(e.target.value)} className="lsOptionInput rounded w-12 p" />
+              </div>
+              <div className="lsOptionItem flex justify-between text-[#555] my-2">
+                <span className="lsOptionText">
+                  Max price <small>per night</small>{' '}
+                </span>
+                <input type="number" onChange={(e) => setMax(e.target.value)} className="lsOptionInput rounded w-12 p" />
               </div>
               <div className="lsOptionItem flex justify-between text-[#555] my-2">
                 <span className="lsOptionText">Adult</span>
@@ -92,21 +108,18 @@ function List() {
               </div>
             </div>
           </div>
-          <button className="py-1.5 text-center rounded bg-[#0071c2] text-white w-full font-semibold">
+          <button onClick={handleClick} className="py-1.5 text-center rounded bg-[#0071c2] text-white w-full font-semibold">
             Search
           </button>
           </div>
         </div>
       </div>
         <div className="listResult w-auto">
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
-          <SearchItem />
+          { loading ? "loading" : <>
+            {data.hotels?.map(item => (
+              <SearchItem key={item._id} item={item} />
+            ))}
+          </>}
         </div>
       </div>
     </>
