@@ -8,25 +8,29 @@ import { FaCircleArrowLeft } from "react-icons/fa6";
 import { FaCircleXmark } from "react-icons/fa6";
 import { FaArrowCircleRight } from "react-icons/fa";
 import useFetch from '../hooks/useFetch'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SearchContext } from '../context/SearchContext.jsx'
+import { AuthContext } from '../context/AuthContext.jsx'
+import Modal from '../components/Modal.jsx'
 
 function Hotel() {
   const location = useLocation();
   const id = location.pathname.split("/")[2]
   const[slideNumber, setSlideBumber] = useState(0);
   const[open, SetOpen] = useState(false);
+  const[openModal, setOpenModal] = useState(false);
 
   const { data, loading, error, reFetch} = useFetch(`/api/hotels/find/${id}`);
   const { dates, options } = useContext(SearchContext);
-  // console.log(dates, options);
+  const{ user } = useContext(AuthContext)
+  const navigate = useNavigate();
   const MILLISECOND_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
-    const timeDiff = Math.abs(date2.getTime() - date1.getTime());  
+    const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());  
     const daysDiff = Math.ceil(timeDiff / MILLISECOND_PER_DAY);
     return daysDiff;
   }
-  const days = dayDifference(dates[0].endDate, dates[0].startDate)
+  const days = dayDifference(dates[0]?.endDate, dates[0]?.startDate)
 
   // console.log(data);
   // const photos = [
@@ -57,8 +61,15 @@ function Hotel() {
     }else {
       newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
-
     setSlideBumber(newSlideNumber)
+  }
+
+  const handleClick = () => {
+    if(user){
+      setOpenModal(true);
+    }else{
+      navigate('/signin');
+    }
   }
 
   return (
@@ -105,13 +116,27 @@ function Hotel() {
               <h1 className="text-[17px] text-[#555] font-bold">Perfect for a {days}-night stay!</h1>
               <span className="text-sm my-2">Located in the real heart of krakow, this property has an excellent location score of 9.8!</span>
               <h2 className="text-xl font-semibold my-2"><b>${days * data.hotel?.cheapestPrice * options.room}</b>({days} nights)</h2>
-              <button className="rounded cursor-pointer bg-[#0071c2] text-white font-semibold py-1 px-2">Rserve or Book Now!</button>
+              {/* Open the modal using document.getElementById('ID').showModal() method */}
+<button className="btn" onClick={()=>document.getElementById('my_modal_1').showModal()}>open modal</button>
+<dialog id="my_modal_1" className="modal">
+  <div className="modal-box">
+    <h3 className="font-bold text-lg">Hello!</h3>
+    <p className="py-4">Press ESC key or click the button below to close</p>
+    <div className="modal-action">
+      <form method="dialog">
+        {/* if there is a button in form, it will close the modal */}
+        <button className="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
             </div>
           </div>
         </div>
         <MailList />
         <Footer />
       </div>}
+      {openModal && <Modal setOpen={setOpenModal} hotelId={id}/>}
     </div>
   )
 }

@@ -8,6 +8,7 @@ import {
 import Home from './pages/Home'
 import List from './pages/List'
 import Hotel from './pages/Hotel'
+import Login from './pages/Login'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path='/' element={<Home />}/>
           <Route path='hotels' element={<List />}/>
           <Route path='/hotels/:id' element={<Hotel />}/>
+          <Route path='/signin' element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>

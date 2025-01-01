@@ -11,6 +11,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import {format} from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../context/SearchContext.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
 
 function Header({type}) {
     const[destination, setDestination] = useState('');
@@ -30,6 +31,7 @@ function Header({type}) {
   })
 
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const handleOption = (name, operation) => {
     setOptions( (prev) =>{
@@ -73,7 +75,7 @@ function Header({type}) {
             <>
             <h1 className='headerTitle font-bold text-xl md:text-2xl lg:text-3xl'>A lifetime of discounts? It's Genius.</h1>
             <p className='headerDescription my-5 mx-0'>Get reward for your travels - unlock instant savings of 10% or more with a free Lanmbooking account</p>
-            {/* <button className='headerBtn bg-[#0071c2] font-semibold border-none w-fit rounded cursor-pointer p-2'>Sign in /  Register</button>   */}
+            {!user && <button className='headerBtn bg-[#0071c2] font-semibold border-none w-fit rounded cursor-pointer p-2'>Sign in /  Register</button>  }
             <div className='headerSearch bg-white text-gray-400 shadow-lg w-auto md:flex lg:flex  items-center justify-center rounded absolute -bottom-6'>
                 <div className='headerSearchItem flex items-center gap-2 border-[4px] border-[#febb02] p-3 rounded'>
                     <FaBed />
